@@ -1,0 +1,6 @@
+{
+    "env": {
+        "MONGO_ATLAS_PW": "YJD5k2ynHLhnPEy0",
+        "JWT_KEY": "Deceptivedeceptive"
+    }
+}

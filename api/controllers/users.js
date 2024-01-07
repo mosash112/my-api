@@ -12,7 +12,7 @@ const errorLog = (err, res) => {
 
 exports.users_get_all = (req, res, next) => {
     User.find()
-        .select('email password _id')
+        .select('email password _id name type admin')
         .exec()
         .then(docs => {
             const response = {
@@ -21,6 +21,9 @@ exports.users_get_all = (req, res, next) => {
                     return {
                         _id: doc._id,
                         email: doc.email,
+                        name: doc.name,
+                        type: doc.type,
+                        admin: doc.admin,
                         password: doc.password,
                         request: {
                             type: 'GET',
@@ -53,7 +56,8 @@ exports.users_signup = (req, res, next) => {
                             email: req.body.email,
                             password: hash,
                             name: req.body.name,
-                            admin: req.body.admin
+                            admin: req.body.admin,
+                            type: req.body.type
                         })
                         user.save()
                             .then(result => {
@@ -63,7 +67,8 @@ exports.users_signup = (req, res, next) => {
                                     user: {
                                         _id: result._id,
                                         email: result.email,
-                                        name: result.name
+                                        name: result.name,
+                                        type: req.body.type
                                     }
                                 })
                             })
@@ -75,7 +80,7 @@ exports.users_signup = (req, res, next) => {
 }
 
 exports.users_login = (req, res, next) => {
-    User.find({ email: req.body.email })
+    User.find({ email: req.body.email, type: req.body.type })
         .exec()
         .then(user => {
             console.log(req.body);
@@ -102,7 +107,8 @@ exports.users_login = (req, res, next) => {
                         user: {
                             _id: user[0]._id,
                             name: user[0].name,
-                            admin: user[0].admin
+                            admin: user[0].admin,
+                            type:user[0].type
                         },
                         message: 'Auth successful',
                         token: token

@@ -10,7 +10,9 @@ const userSchema = mongoose.Schema({
     },
     password: { type: String, required: true },
     name: { type: String },
-    admin: { type: Boolean, default: false }
+    admin: { type: Boolean, default: false },
+    type: { type: String },
+    orders: [{ orderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' } }],
 })
 
 module.exports = mongoose.model('User', userSchema)

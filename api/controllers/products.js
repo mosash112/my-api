@@ -42,18 +42,19 @@ exports.products_get_all = (req, res, next) => {
 }
 
 exports.products_create_product = (req, res, next) => {
-    console.log(req.file)
+    console.log( req.body.image)
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
         price: req.body.price,
         description: req.body.description,
         category: req.body.selectedCategory,
-        stock:req.body.stock,
-        // image: req.file.path,
+        stock: req.body.stock,
+        image: req.body.image,
         rate: req.body.rate,
         count: req.body.count
     })
+    // console.log(product);
 
     product.save().then(result => {
         // console.log(result);
@@ -65,8 +66,8 @@ exports.products_create_product = (req, res, next) => {
                 price: result.price,
                 description: result.description,
                 category: result.categoryId,
-                stock:result.stock,
-                // image: result.image,
+                stock: result.stock,
+                image: result.image,
                 rate: result.rate,
                 count: result.count,
                 request: {
@@ -76,7 +77,7 @@ exports.products_create_product = (req, res, next) => {
                 }
             }
         })
-    }).catch(err => errorLog(err, res))
+    }).catch(err => {console.log(`couldn\'t create the product`);errorLog(err, res)})
 }
 
 exports.products_get_product = (req, res, next) => {
@@ -146,11 +147,11 @@ exports.products_delete_product = (req, res, next) => {
 
 exports.products_get_categories = (req, res, next) => {
     Category.find()
-    .exec()
-    .then(docs => {
-        res.status(200).json(docs)
-    })
-    .catch(err => errorLog(err, res))
+        .exec()
+        .then(docs => {
+            res.status(200).json(docs)
+        })
+        .catch(err => errorLog(err, res))
 }
 
 exports.products_create_category = (req, res, next) => {
@@ -231,7 +232,7 @@ exports.products_delete_category = (req, res, next) => {
                 request: {
                     type: 'POST',
                     description: 'Create new category',
-                    body: { name: 'String'},
+                    body: { name: 'String' },
                     url: 'http://localhost:9000/products/categories'
                 }
             })
